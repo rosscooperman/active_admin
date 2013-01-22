@@ -9,6 +9,7 @@ require File.expand_path('spec/support/detect_rails_version', ACTIVE_ADMIN_PATH)
 rails_version = detect_rails_version
 gem 'rails',          rails_version
 gem 'bourbon'
+gem 'devise', '>= 1.1.2'
 
 case rails_version
 when /^3\.0/

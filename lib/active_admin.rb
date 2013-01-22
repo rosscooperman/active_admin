@@ -1,13 +1,12 @@
 require 'meta_search'
 require 'bourbon'
-require 'devise'
 require 'kaminari'
 require 'formtastic'
 require 'sass'
 require 'inherited_resources'
 require 'jquery-rails'
 require 'arbre'
-require 'active_admin/dependency_checker' 
+require 'active_admin/dependency_checker'
 require 'active_admin/sass/helpers'
 require 'active_admin/engine'
 
@@ -87,7 +86,7 @@ module ActiveAdmin
     # Migration MoveAdminNotesToComments generated with version 0.2.2 might reference
     # to ActiveAdmin.default_namespace.
     delegate :default_namespace, :to => :application
-    ActiveAdmin::Deprecation.deprecate self, :default_namespace, 
+    ActiveAdmin::Deprecation.deprecate self, :default_namespace,
       "ActiveAdmin.default_namespace is deprecated. Please use ActiveAdmin.application.default_namespace"
 
     # A callback is triggered each time (before) Active Admin loads the configuration files.

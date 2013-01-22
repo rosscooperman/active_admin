@@ -8,7 +8,24 @@ module ActiveAdmin
                     :desc => "Should the generated resource be registerable?"
 
       def install_devise
-        require 'devise'
+        begin
+          require 'devise'
+        rescue LoadError => e
+          $stderr.puts ["You don't have Devise installed in your application. Please add it to your",
+            "Gemfile and run bundle install. If you do not require Devise run the generator with",
+            "--skip-users option"].join(' ')
+          exit
+        end
+        run_devise_generator
+        create_admin_user
+        remove_registerable_from_model
+        set_namespace_for_path
+        add_default_user_to_migration
+      end
+
+    private
+
+      def run_devise_generator
         if File.exists?(File.join(destination_root, "config", "initializers", "devise.rb"))
           log :generate, "No need to install devise, already done."
         else
@@ -42,7 +59,7 @@ module ActiveAdmin
 
         if devise_migration_content["def change"]
           inject_into_file  devise_migration_file,
-                            "def migrate(direction)\n    super\n    # Create a default user\n    #{class_name}.create!(:email => 'admin@example.com', :password => 'password', :password_confirmation => 'password') if direction == :up\n  end\n\n  ", 
+                            "def migrate(direction)\n    super\n    # Create a default user\n    #{class_name}.create!(:email => 'admin@example.com', :password => 'password', :password_confirmation => 'password') if direction == :up\n  end\n\n  ",
                             :before => "def change"
         elsif devise_migration_content[/def (self.)?up/]
           inject_into_file  devise_migration_file,
